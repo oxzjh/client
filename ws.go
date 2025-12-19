@@ -25,6 +25,12 @@ func (w *ws) Write(data []byte) error {
 	return w.conn.WriteMessage(websocket.BinaryMessage, data)
 }
 
+func (w *ws) WriteJson(v any) error {
+	w.Lock()
+	defer w.Unlock()
+	return w.conn.WriteJSON(v)
+}
+
 func (w *ws) Close() error {
 	return w.conn.Close()
 }

@@ -9,6 +9,7 @@ import (
 type IClient interface {
 	Read() ([]byte, error)
 	Write([]byte) error
+	WriteJson(v any) error
 	Close() error
 }
 

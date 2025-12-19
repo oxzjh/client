@@ -1,6 +1,9 @@
 package client
 
-import "net"
+import (
+	"encoding/json"
+	"net"
+)
 
 type udp struct {
 	conn   net.Conn
@@ -15,6 +18,11 @@ func (u *udp) Read() ([]byte, error) {
 func (u *udp) Write(data []byte) error {
 	_, err := u.conn.Write(data)
 	return err
+}
+
+func (u *udp) WriteJson(v any) error {
+	data, _ := json.Marshal(v)
+	return u.Write(data)
 }
 
 func (u *udp) Close() error {
