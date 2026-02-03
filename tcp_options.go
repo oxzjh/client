@@ -1,21 +1,21 @@
 package client
 
-import "io"
+import "github.com/oxzjh/stream"
 
 type options struct {
-	maker  func(int) []byte
-	parser func(io.Reader) ([]byte, error)
+	maker  stream.IMaker
+	parser stream.IParser
 }
 
 type Option func(*options)
 
-func WithMaker(maker func(int) []byte) Option {
+func WithMaker(maker stream.IMaker) Option {
 	return func(o *options) {
 		o.maker = maker
 	}
 }
 
-func WithParser(parser func(io.Reader) ([]byte, error)) Option {
+func WithParser(parser stream.IParser) Option {
 	return func(o *options) {
 		o.parser = parser
 	}

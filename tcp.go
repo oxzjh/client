@@ -5,7 +5,7 @@ import (
 	"net"
 	"sync"
 
-	"github.com/oxzjh/server"
+	"github.com/oxzjh/stream"
 )
 
 type tcp struct {
@@ -15,13 +15,13 @@ type tcp struct {
 }
 
 func (t *tcp) Read() ([]byte, error) {
-	return t.opts.parser(t.conn)
+	return t.opts.parser.Parse(t.conn)
 }
 
 func (t *tcp) Write(data []byte) error {
 	t.Lock()
 	defer t.Unlock()
-	_, err := t.conn.Write(t.opts.maker(len(data)))
+	_, err := t.conn.Write(t.opts.maker.Make(len(data)))
 	if err == nil {
 		_, err = t.conn.Write(data)
 	}
@@ -39,8 +39,8 @@ func (t *tcp) Close() error {
 
 func NewTCP(addr string, opts ...Option) (IClient, error) {
 	os := &options{
-		maker:  server.MakeStream,
-		parser: server.ParseStream4,
+		maker:  stream.NewMaker(0x92),
+		parser: stream.NewSimpleParser(4),
 	}
 	for _, opt := range opts {
 		opt(os)
